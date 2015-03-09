@@ -11,3 +11,4 @@ def hi(bot, trigger):
         bot.say("Shut up " + choice(meanWords))
     else:
         bot.say('Hi, ' + trigger.nick)
+
