@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import willie
+from willie.module import rule
 
 
-@willie.module.rule(r'^[Cc]ongratulations!?')
+@rule(r'^[Cc]ongratulations!?')
 def congratulations(bot, trigger):
     bot.say('congratulations!')
 
