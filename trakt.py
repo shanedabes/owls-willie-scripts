@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import willie
+from willie.module import commands
 import requests
 
 api = '10c008753ac9b96f28f91594236141bc2390240d8fe7947a8c38f3a351c9a586'
@@ -10,7 +10,7 @@ url = ('http://api.trakt.tv/activity/user.json/{0}/{1}/episode,movie/'
 url = ('https://api.trakt.tv/users/username/history/episodes,movies')
 
 
-@willie.module.commands('trakt')
+@commands('trakt')
 def trakt(bot, trigger):
     user = trigger.group(2)
     r = requests.get(url.format(api, user)).json()
@@ -49,3 +49,4 @@ def trakt(bot, trigger):
         out += ' (watching now)'
 
     bot.say(out)
+
