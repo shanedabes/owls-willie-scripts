@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from willie.module import commands
+from sopel.module import commands
 import requests
 
 api = '10c008753ac9b96f28f91594236141bc2390240d8fe7947a8c38f3a351c9a586'
@@ -49,4 +49,3 @@ def trakt(bot, trigger):
         out += ' (watching now)'
 
     bot.say(out)
-

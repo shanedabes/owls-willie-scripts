@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import willie
+from sopel.module import commands
 import requests
 # from operator import itemgetter
 
 
-@willie.module.commands('steam')
+@commands('steam')
 def steam(bot, trigger):
 # def steam(username):
     username = trigger.group(2)
@@ -25,7 +25,7 @@ def steam(bot, trigger):
     recent_games_request = requests.get(recent_games_api_url.format(steam_id))
     last_game = recent_games_request.json()['response']['games'][0]
     # game_name, play_time = itemgetter('name', 'playtime_2weeks')(last_game)
-    game_name = last_game['name'].encode('cp850', errors='ignore')
+    game_name = last_game['name']
 
     # print play_time
     # print unicode(game_name)
