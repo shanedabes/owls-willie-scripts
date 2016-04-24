@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
-from willie.module import rule
+from sopel.module import rule
 
 
 @rule(r'^[Cc]ongratulations!?')
 def congratulations(bot, trigger):
-    bot.say('Congratulations!')
-
+    bot.say('congratulations!')
