@@ -22,7 +22,7 @@ url = ('http://forums.somethingawful.com/query.php?q=username%3A"{0}"+&action=qu
         '188&forums%5B%5D=49&forums%5B%5D=21&forums%5B%5D=264&forums%5B%5D=115'
         '&forums%5B%5D=176&forums%5B%5D=229&forums%5B%5D=25')
 login_url = 'http://forums.somethingawful.com/account.php?action=loginform'
-payload = {'action': 'login', 'username': 'sharktamer', 'password': '7375u05h1ma'}
+payload = {'action': 'login', 'username': 'sharktamer', 'password': '5pac3k3v1n'}
 re_post = re.compile(r'(?:class="threadtitle"[^>]+>)([^<]+)')
 re_thread = re.compile(r'(?:class="blurb"[^>]*>)([^<]+)')
 
