@@ -8,9 +8,28 @@ from random import choice
 
 @commands('donger')
 def donger(bot, trigger):
-    url = 'http://dongerlist.com/'
+    args = trigger.group(2)
+    if args:
+        cat = args.split()[0].lower()
+        cat_url = 'http://dongerlist.com/category/{}'.format(cat)
+        r = requests.get(cat_url)
+        if r.status_code == 200:
+            url = cat_url
+        else:
+            bot.say('No {} category'.format(cat))
+            return
+    else:
+        url = 'http://dongerlist.com/'
+
     r = requests.get(url)
-    pages = int(re.search(r'class="last".*?/([^/]*?)"', r.text).group(1))
+    pages_re = re.findall(r'class="last".*?/([^/]*?)"', r.text)
+    if not pages_re:
+        pages_re = re.findall(r'class=".*?larger".*?>(\d+)<', r.text)
+
+    if pages_re:
+        pages = int(pages_re[-1])
+    else:
+        pages = 1
 
     rpage = choice(range(1, pages+1))
     if rpage > 1:
