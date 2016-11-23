@@ -17,6 +17,7 @@ def donger(bot, trigger):
             url = cat_url
         else:
             bot.say('No {} category'.format(cat))
+            bot.say('Find categories at dongerlist.com')
             return
     else:
         url = 'http://dongerlist.com/'
