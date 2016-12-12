@@ -28,6 +28,10 @@ def trakt(bot, trigger):
     r = requests.get(bot.memory['trakt']['url'].format(user),
                      headers=bot.memory['trakt']['headers'])
 
+    if not user:
+        bot.say('No user given')
+        return
+
     if r.status_code == 404:
         bot.say('User {} does not exist'.format(user))
         return
