@@ -1,51 +1,54 @@
 #!/usr/bin/python
 
 from sopel.module import commands
+from sopel.config.types import StaticSection, ValidatedAttribute
 import requests
 
-api = '10c008753ac9b96f28f91594236141bc2390240d8fe7947a8c38f3a351c9a586'
-# user = 'sharktamer'
-url = ('http://api.trakt.tv/activity/user.json/{0}/{1}/episode,movie/'
-       'watching,scrobble,checkin,seen?min=1')
-url = ('https://api.trakt.tv/users/username/history/episodes,movies')
+
+class TraktSection(StaticSection):
+    api = ValidatedAttribute('api')
+
+
+def setup(bot):
+    bot.config.define_section('trakt', TraktSection)
+    bot.memory['trakt'] = {'url': 'https://api.trakt.tv/users/{}/history',
+                           'headers': {'Content-Type': 'application/json',
+                                       'trakt-api-version': '2',
+                                       'trakt-api-key': bot.config.trakt.api}}
+
+
+def configure(config):
+    config.define_section('trakt', TraktSection, validate=False)
+    config.trakt.configure_setting('api', 'Enter trakt api')
 
 
 @commands('trakt')
 def trakt(bot, trigger):
     user = trigger.group(2)
-    r = requests.get(url.format(api, user)).json()
+    r = requests.get(bot.memory['trakt']['url'].format(user),
+                     headers=bot.memory['trakt']['headers'])
 
-    if user is None:
-        bot.say('Usage: .trakt <username>')
-        return 0
+    if r.status_code == 404:
+        bot.say('User {} does not exist'.format(user))
+        return
 
-    if 'status' in r:
-        bot.say('Fetch failed for user {0}'.format(user))
-        return 0
+    if len(r.json()) == 0:
+        bot.say('User {} has no history'.format(user))
+        return
 
-    if len(r['activity']) == 0:
-        bot.say('{0} has no activity'.format(user))
-        return 0
-
-    last = r['activity'][0]
-
-    out = '{}\'s most recent trakt activity: '.format(user)
+    last = r.json()[0]
 
     if last['type'] == 'episode':
-        show = last['show']['title']
-        if 'episodes' in last:
-            season = last['episodes'][0]['season']
-            episode = str(last['episodes'][0]['episode']).zfill(2)
-            title = last['episodes'][0]['title']
-        else:
-            season = last['episode']['season']
-            episode = str(last['episode']['number']).zfill(2)
-            title = last['episode']['title']
-        out += '{} {}x{}: {}'.format(show, season, episode, title)
+        meta = [user,
+                last['show']['title'],
+                last['episode']['season'],
+                last['episode']['number'],
+                last['episode']['title']]
+        out = '{} last watched: {} {}x{:02} - {}'.format(*meta)
     elif last['type'] == 'movie':
-        out += last['movie']['title']
-
-    if last['action'] == 'watching':
-        out += ' (watching now)'
+        meta = [user,
+                last['movie']['title'],
+                last['movie']['year']]
+        out = ['{} last watched: {} ({})']
 
     bot.say(out)
