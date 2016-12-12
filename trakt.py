@@ -49,6 +49,6 @@ def trakt(bot, trigger):
         meta = [user,
                 last['movie']['title'],
                 last['movie']['year']]
-        out = ['{} last watched: {} ({})']
+        out = '{} last watched: {} ({})'.format(*meta)
 
     bot.say(out)
