@@ -2,7 +2,7 @@
 
 from sopel.module import commands
 from sopel.config.types import StaticSection, ValidatedAttribute
-# from sopel.formatting import color, colors
+from collections import Counter
 import requests
 
 
@@ -14,6 +14,8 @@ def setup(bot):
     bot.config.define_section('trakt', TraktSection)
     bot.memory['trakt'] = {'hist_url': 'https://api.trakt.tv/users/{}/history',
                            'stats_url': 'https://api.trakt.tv/users/{}/stats',
+                           'r_url': ('https://api.trakt.tv/users/{}/'
+                                     'ratings/movies'),
                            'headers': {'Content-Type': 'application/json',
                                        'trakt-api-version': '2',
                                        'trakt-api-key': bot.config.trakt.api}}
@@ -27,12 +29,13 @@ def configure(config):
 @commands('trakt')
 def trakt(bot, trigger):
     user = trigger.group(2)
-    r = requests.get(bot.memory['trakt']['hist_url'].format(user),
-                     headers=bot.memory['trakt']['headers'])
 
     if not user:
         bot.say('No user given')
         return
+
+    r = requests.get(bot.memory['trakt']['hist_url'].format(user),
+                     headers=bot.memory['trakt']['headers'])
 
     if r.status_code == 404:
         bot.say('User {} does not exist'.format(user))
@@ -63,29 +66,33 @@ def trakt(bot, trigger):
 @commands('traktstats')
 def traktstats(bot, trigger):
     user = trigger.group(2)
-    r = requests.get(bot.memory['trakt']['stats_url'].format(user),
-                     headers=bot.memory['trakt']['headers'])
 
     if not user:
         bot.say('No user given')
         return
 
-    if r.status_code == 404:
+    stats_r = requests.get(bot.memory['trakt']['stats_url'].format(user),
+                           headers=bot.memory['trakt']['headers'])
+
+    if stats_r.status_code == 404:
         bot.say('User {} does not exist'.format(user))
         return
 
-    stats = r.json()
+    ratings_r = requests.get(bot.memory['trakt']['r_url'].format(user),
+                             headers=bot.memory['trakt']['headers'])
 
-    ratings = stats['ratings']['distribution']
-    ratings_dist = '/'.join(str(ratings[str(i)]) for i in range(1, 11))
+    stats = stats_r.json()
+    ratings = ratings_r.json()
+    r_counter = Counter(i['rating'] for i in ratings)
+    ratings_dist = '/'.join(str(i) for i in r_counter.values())
 
     meta = [user,
             stats['movies']['watched'],
             stats['shows']['watched'],
             stats['episodes']['watched'],
-            stats['ratings']['total'],
+            sum(r_counter.values()),
             ratings_dist]
     out = ('{} has watched {} films and {} shows with {} episodes. They have '
-           '{} ratings with the following distribution: {}').format(*meta)
+           'rated {} films with the following distribution: {}').format(*meta)
 
     bot.say(out)
