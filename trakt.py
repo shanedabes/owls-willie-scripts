@@ -115,3 +115,5 @@ def traktset(bot, trigger):
 
     db = SopelDB(bot.config)
     db.set_nick_value(trigger.nick, 'trakt_user', user)
+
+    bot.say('{}\'s trakt user is now set as {}'.format(trigger.nick, user))
