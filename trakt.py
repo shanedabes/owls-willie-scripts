@@ -2,6 +2,7 @@
 
 from sopel.module import commands
 from sopel.config.types import StaticSection, ValidatedAttribute
+from sopel.db import SopelDB
 from collections import Counter
 import requests
 
@@ -31,8 +32,11 @@ def trakt(bot, trigger):
     user = trigger.group(2)
 
     if not user:
-        bot.say('No user given')
-        return
+        db = SopelDB(bot.config)
+        user = db.get_nick_value(trigger.nick, 'trakt_user')
+        if not user:
+            bot.say('User not given or set. Use .traktset to set your user')
+            return
 
     r = requests.get(bot.memory['trakt']['hist_url'].format(user),
                      headers=bot.memory['trakt']['headers'])
@@ -68,8 +72,11 @@ def traktstats(bot, trigger):
     user = trigger.group(2)
 
     if not user:
-        bot.say('No user given')
-        return
+        db = SopelDB(bot.config)
+        user = db.get_nick_value(trigger.nick, 'trakt_user')
+        if not user:
+            bot.say('User not given or set. Use .traktset to set your user')
+            return
 
     stats_r = requests.get(bot.memory['trakt']['stats_url'].format(user),
                            headers=bot.memory['trakt']['headers'])
@@ -96,3 +103,15 @@ def traktstats(bot, trigger):
            'rated {} films with the following distribution: {}').format(*meta)
 
     bot.say(out)
+
+
+@commands('traktset')
+def traktset(bot, trigger):
+    user = trigger.group(2)
+
+    if not user:
+        bot.say('no user given')
+        return
+
+    db = SopelDB(bot.config)
+    db.set_nick_value(trigger.nick, 'trakt_user', user)
