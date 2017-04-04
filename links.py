@@ -1,36 +1,29 @@
 #!/usr/bin/python
 
-from sopel.module import commands
-from url import find_title
 import random
 
-def send_vid(bot, url):
-    bot.say(find_title(url))
-    bot.say(url)
 
-@commands('yungle')
-def yungle(bot, trigger):
-    send_vid(bot, 'https://youtu.be/d4vOSFB7UxM')
+links = {
+    'yungle': 'https://youtu.be/d4vOSFB7UxM',
+    'slaiyers': 'https://youtu.be/NbCM1pREIDM',
+    'spencecat': 'https://youtu.be/wycimfa5yuI',
+    'bmo': {
+        'bmo chop': 'https://youtu.be/fYuhBvYVAqQ',
+        'bmo friendship song': 'https://youtu.be/dDkvgva_u58',
+        'bmo pregnant song': 'https://youtu.be/sEDVop64UmM',
+        'bmo and football': 'https://youtu.be/XGK0oItKR94',
+        'bmo changing batteries': 'https://youtu.be/0QRpJv1nYG4'
+    },
+    'fuk': 'http://is.gd/xRDJNP'
+}
 
-@commands('slaiyers')
-def slaiyers(bot, trigger):
-    send_vid(bot, 'https://youtu.be/NbCM1pREIDM')
 
-@commands('spencecat')
-def spencecat(bot, trigger):
-    send_vid(bot, 'https://youtu.be/wycimfa5yuI')
+def out(bot, trigger):
+    item = links[trigger.args[1][1:]]
+    if isinstance(item, str):
+        bot.say(item)
+    else:
+        name, url = random.choice(list(item.items()))
+        bot.say('{} - {}'.format(name, url))
 
-@commands('bmo')
-def bmo(bot, trigger):
-    vids = [
-        'fYuhBvYVAqQ',
-        '-gpkYhVTRxs',
-        'ixXU1fngoyI',
-        'XGK0oItKR94',
-        '0QRpJv1nYG4'
-    ]
-    send_vid(bot, 'https://youtu.be/{}'.format(random.choice(vids)))
-
-@commands('fuk')
-def fuk(bot, trigger):
-    bot.say('http://is.gd/xRDJNP')
+out.commands = list(links.keys())
