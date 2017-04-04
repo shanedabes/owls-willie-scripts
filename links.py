@@ -19,7 +19,7 @@ links = {
 
 
 def out(bot, trigger):
-    item = links[trigger.args[1][1:]]
+    item = links[trigger.group(1)]
     if isinstance(item, str):
         bot.say(item)
     else:
