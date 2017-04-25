@@ -33,7 +33,7 @@ def fm(bot, trigger):
 
     r = requests.get('http://ws.audioscrobbler.com/2.0/'
                      '?method=user.getrecenttracks&user={}&'
-                     'api_key={}&format=json'.format(user, api))
+                     'api_key={}&format=json&limit=1'.format(user, api))
 
     if 'recenttracks' not in r.json():
         bot.say('User {} not found'.format(user))
@@ -53,6 +53,39 @@ def fm(bot, trigger):
     meta = (user, action, last['artist']['#text'], last['name'],
             last['album']['#text'])
     out = '♫ {} {} {} - {} ({}) ♫'.format(*meta)
+
+    bot.say(out)
+
+
+@commands('fmtop')
+def fmtop(bot, trigger):
+    user = trigger.group(2)
+    api = bot.config.lastfm.api
+
+    if not user:
+        db = SopelDB(bot.config)
+        user = db.get_nick_value(trigger.nick, 'lastfm_user')
+        if not user:
+            bot.say('User not given or set. Use .fmset to set your user')
+            return
+
+    r = requests.get('http://ws.audioscrobbler.com/2.0/'
+                     '?method=user.gettopartists&user={}&'
+                     'api_key={}&format=json'
+                     '&period=7day&limit=3'.format(user, api))
+
+    if 'topartists' not in r.json():
+        bot.say('User {} not found'.format(user))
+        return
+
+    if len(r.json()['topartists']['artist']) == 0:
+        bot.say('{} hasn\'t listened to any tracks yet'.format(user))
+        return
+
+    artists = ' * '.join(['{} ({})'.format(i['name'], i['playcount'])
+                          for i in r.json()['topartists']['artist']])
+
+    out = '{}\'s top artists (7 days): {}'.format(user, artists)
 
     bot.say(out)
 
