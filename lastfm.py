@@ -45,7 +45,7 @@ def fm(bot, trigger):
 
     last = r.json()['recenttracks']['track'][0]
 
-    if last['@attr']['nowplaying'] == 'true':
+    if '@attr' in last and last['@attr']['nowplaying'] == 'true':
         action = 'is listening to'
     else:
         action = 'last listened to'
