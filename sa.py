@@ -38,7 +38,7 @@ def configure(config):
 def get_last_sa_post(bot, trigger):
     user = trigger.groups()[1]
     search_url = ('http://forums.somethingawful.com/'
-                  'query.php?q=username%3A{}+&action=query')
+                  'query.php?q=username%3A"{}"+&action=query')
     re_post = re.compile(r'(?:class="threadtitle"[^>]+>)([^<]+)')
     re_thread = re.compile(r'(?:class="blurb"[^>]*>)([^<]+)')
 
