@@ -40,7 +40,7 @@ def get_last_sa_post(bot, trigger):
     search_url = ('http://forums.somethingawful.com/'
                   'query.php?q=username%3A"{}"+&action=query')
     re_post = re.compile(r'(?:class="threadtitle"[^>]+>)([^<]+)')
-    re_thread = re.compile(r'(?:class="blurb"[^>]*>)([^<]+)')
+    re_thread = re.compile(r'(?:class="blurb"[^>]*?>)([^<]+)')
 
     r = bot.memory['sa']['session'].get(search_url.format(user))
 
