@@ -15,5 +15,5 @@ def gif(bot, trigger):
     if not gi:
         bot.say('NO GIFS U FUK')
     else:
-        gif_url = shortener.short(gi.media_url)
-        bot.say(gif_url)
+        #gif_url = shortener.short(gi.media_url)
+        bot.say(gi.media_url)
