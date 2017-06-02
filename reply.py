@@ -2,7 +2,6 @@
 
 from sopel.config.types import StaticSection, ListAttribute
 from sopel.config import ConfigurationError
-from sopel.modules import reload
 from sopel.module import commands
 
 
