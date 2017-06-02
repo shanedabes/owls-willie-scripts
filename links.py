@@ -1,29 +1,45 @@
 #!/usr/bin/python
 
-import random
+from random import choice
+from sopel.config.types import StaticSection, ListAttribute
 
 
-links = {
-    'yungle': 'https://youtu.be/d4vOSFB7UxM',
-    'slaiyers': 'https://youtu.be/NbCM1pREIDM',
-    'spencecat': 'https://youtu.be/wycimfa5yuI',
-    'bmo': {
-        'bmo chop': 'https://youtu.be/fYuhBvYVAqQ',
-        'bmo friendship song': 'https://youtu.be/dDkvgva_u58',
-        'bmo pregnant song': 'https://youtu.be/sEDVop64UmM',
-        'bmo and football': 'https://youtu.be/XGK0oItKR94',
-        'bmo changing batteries': 'https://youtu.be/0QRpJv1nYG4'
-    },
-    'fuk': 'http://is.gd/xRDJNP'
-}
+class LinksSection(StaticSection):
+    names = ListAttribute('names')
 
 
-def out(bot, trigger):
-    item = links[trigger.group(1)]
-    if isinstance(item, str):
-        bot.say(item)
-    else:
-        name, url = random.choice(list(item.items()))
-        bot.say('{} - {}'.format(name, url))
+def setup(bot):
+    bot.config.define_section('links', LinksSection)
 
-out.commands = list(links.keys())
+    get_link.commands = bot.config.links.names
+
+
+def configure(config):
+    config.define_section('links', LinksSection, validate=False)
+    config.links.configure_setting('names', 'enter links commands to set up')
+
+
+def get_link(bot, trigger):
+    command, new_link = trigger.group(1), trigger.group(2)
+
+    links = bot.db.get_nick_value(bot.nick, command)
+
+    if new_link:
+        if not trigger.owner:
+            bot.say('You are not the bot owner')
+            return
+        if not links:
+            links = ''
+        if new_link in links:
+            bot.say('Link already exists')
+            return
+        bot.db.set_nick_value(bot.nick, command, links + '\x1e' + new_link)
+        bot.say('New link added for .{} command'.format(command))
+        return
+
+    if not links:
+        bot.say('No links set for {}'.format(command))
+        return
+
+    link = choice(links.split('\x1e'))
+    bot.say(link)
