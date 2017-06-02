@@ -26,7 +26,7 @@ def configure(config):
 
 def reply(bot, trigger):
     rules, replies = bot.config.reply.rules, bot.config.reply.replies
-    rule = trigger.args[1]
+    rule = trigger.match.group()
     reply = replies[rules.index(rule)]
 
     bot.say(reply)
