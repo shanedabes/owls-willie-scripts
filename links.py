@@ -29,11 +29,13 @@ def get_link(bot, trigger):
             bot.say('You are not the bot owner')
             return
         if not links:
-            links = ''
-        if new_link in links:
-            bot.say('Link already exists')
-            return
-        bot.db.set_nick_value(bot.nick, command, links + '\x1e' + new_link)
+            links = new_link
+        else:
+            if new_link in links:
+                bot.say('Link already exists')
+                return
+            links = links + '\x1e' + new_link
+        bot.db.set_nick_value(bot.nick, command, links)
         bot.say('New link added for .{} command'.format(command))
         return
 
