@@ -10,7 +10,8 @@ def meme(bot, trigger):
         bot.say('Usage: .meme meme_type/top_text/bottom_text')
         return
 
-    meme, top, bottom = trigger.group(2).split('/', 2)
+    meme, top, bottom = [i.replace(' ', '_')
+                         for i in trigger.group(2).split('/', 2)]
 
     url = 'memegen.link/{}/{}/{}.jpg'.format(meme, top, bottom)
 
