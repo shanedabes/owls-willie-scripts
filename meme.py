@@ -8,7 +8,7 @@ def escape(text):
     trans = [(' ', '_'), ('?', '~q'), ('#', '~h'), ('/', '~s'), ('"', '\'\'')]
 
     for a, b in trans:
-        text.replace(a, b)
+        text = text.replace(a, b)
 
     return text
 
