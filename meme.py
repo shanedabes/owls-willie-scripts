@@ -21,6 +21,6 @@ def meme(bot, trigger):
 
     meme, top, bottom = [escape(i) for i in trigger.group(2).split('/', 2)]
 
-    url = 'memegen.link/{}/{}/{}.jpg'.format(meme, top, bottom)
+    url = 'https://memegen.link/{}/{}/{}.jpg'.format(meme, top, bottom)
 
     bot.say(url)
