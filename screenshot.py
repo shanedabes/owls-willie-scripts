@@ -21,7 +21,7 @@ def setup(bot):
 
 def configure(config):
     config.define_section('ss', SsSection, validate=False)
-    config.ss.configure_setting('tws_api', 'Enter thumbnail.ws api')
+    config.ss.configure_setting('tws_api', 'Enter thumbnail.ws api:')
     config.ss.configure_setting('iclient_id', 'Enter imgur client id:')
     config.ss.configure_setting('iclient_secret', 'Enter imgur client secret:')
 
