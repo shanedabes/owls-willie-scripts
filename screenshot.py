@@ -28,8 +28,6 @@ def configure(config):
 
 @commands('ss')
 def screenshot(bot, trigger):
-    # bot.say(str(bot.memory['last_seen_url'][trigger.sender]))
-
     tws_api = bot.config.ss.tws_api
     url_template = ('https://api.thumbnail.ws/api/{}/thumbnail/get'
                     '?url={}&width=640')
