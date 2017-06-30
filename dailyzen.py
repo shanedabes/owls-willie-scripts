@@ -15,5 +15,5 @@ def zen(bot, trigger):
     c = ' '.join(cr.group(1).split())
 
     for line in z:
-        bot.say(line)
-    bot.say(c)
+        bot.say(line.strip())
+    bot.say(c.strip())
