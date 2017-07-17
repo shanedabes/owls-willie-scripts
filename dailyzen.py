@@ -12,7 +12,7 @@ def zen(bot, trigger):
 
     zr = re.search(r'<blockquote>\s*(?:<p>)?(.*?)(?:</p>)?\s*</blockquote>',
                    r.text.replace('\n', ' '))
-    z = re.split(r'<br(?: /)?>', ' '.join(zr.group(1).split()))
+    z = re.split(r'<br(?: /)?>', ' '.join(zr.group(1).split()), flags=re.I)
 
     cr = re.search(r'<cite>(.*)</cite>', r.text.replace('\n', ' '))
     c = ' '.join(cr.group(1).split())
