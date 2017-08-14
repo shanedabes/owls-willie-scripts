@@ -12,8 +12,8 @@ def godstats(bot, trigger):
     if not god:
         db = SopelDB(bot.config)
         god = db.get_nick_value(trigger.nick, 'god')
-        if not user:
-            bot.say('God not given or set. Use .godset to set your user')
+        if not god:
+            bot.say('God not given or set. Use .godset to set your god')
             return
 
     r = requests.get('http://godvillegame.com/gods/api/{}.json'.format(god))
@@ -31,8 +31,8 @@ def godstats(bot, trigger):
 def godset(bot, trigger):
     god = trigger.group(2)
 
-    if not user:
-        bot.say('no user given')
+    if not god:
+        bot.say('no god given')
         return
 
     db = SopelDB(bot.config)
