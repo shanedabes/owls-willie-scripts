@@ -19,9 +19,9 @@ def godstats(bot, trigger):
     r = requests.get('http://godvillegame.com/gods/api/{}.json'.format(god))
     hero = r.json()
 
-    out = ('{h[godname]}\'s hero {h[name]}:'
-           'A level {h[level]} {h[alignment]} {h[gender]},'
-           '{h[clan]} {h[clan_position]}, {h[arena_won]} arena wins,'
+    out = ('{h[godname]}\'s hero {h[name]}: '
+           'A level {h[level]} {h[alignment]} {h[gender]}, '
+           '{h[clan]} {h[clan_position]}, {h[arena_won]} arena wins, '
            '{h[arena_lost]} arena losses. {h[motto]}').format(h=hero)
 
     bot.say(out)
