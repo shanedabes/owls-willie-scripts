@@ -8,7 +8,7 @@ import random
 from itertools import cycle
 
 
-@commands('checkiday')
+@commands('days')
 def checkiday(bot, trigger):
     r = requests.get('https://www.checkiday.com/rss.php?tz=Europe/London')
     days = re.findall(r'<title>(.*?)</title>', r.text)[1:]
