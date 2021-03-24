@@ -1,6 +1,6 @@
 backports.shutil-get-terminal-size==1.0.0
 cowpy==1.0.1
-decorator==4.0.9
+decorator==4.4.2
 giphypop==0.2
 ipython==4.2.0
 ipython-genutils==0.1.0
