@@ -10,7 +10,7 @@ praw==3.4.0
 ptyprocess==0.5.1
 pygeoip==0.3.2
 pyshorteners==0.6.0
-requests==2.20.0
+requests==2.25.1
 simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.2.1
