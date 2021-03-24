@@ -14,5 +14,5 @@ requests==2.9.1
 simplegeneric==0.8.1
 six==1.10.0
 traitlets==4.2.1
-update-checker==0.11
+update-checker==0.18.0
 xmltodict==0.10.1
