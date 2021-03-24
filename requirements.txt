@@ -7,7 +7,7 @@ ipython-genutils==0.1.0
 pexpect==4.0.1
 pickleshare==0.7.2
 praw==3.4.0
-ptyprocess==0.5.1
+ptyprocess==0.7.0
 pygeoip==0.3.2
 pyshorteners==0.6.0
 requests==2.9.1
